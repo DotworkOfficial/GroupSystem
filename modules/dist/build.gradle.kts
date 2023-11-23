@@ -7,8 +7,8 @@ plugins {
 }
 
 bukkitResourceGenerator {
-    main = "kr.dotmer."
-    name = ""
+    main = "kr.dotmer.group.GroupSystemMain"
+    name = "GroupSystem"
     apiVersion = "1.19"
     libraries = excludedRuntimeDependencies()
     depend = listOf("HQFramework")
