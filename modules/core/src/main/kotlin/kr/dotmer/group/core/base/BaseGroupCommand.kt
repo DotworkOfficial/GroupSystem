@@ -127,4 +127,18 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         groupService.disband(playerGroup)
         player.sendColorizedMessage("&a성공적으로 해체하였습니다.")
     }
+
+    open suspend fun groupInfo(player: Player) {
+        val group = groupService.findPlayerGroup(player.uniqueId)
+
+        if (group == null) {
+            player.sendColorizedMessage("&c어떤 곳에도 속해있지 않습니다.")
+            return
+        }
+
+        player.sendColorizedMessage("&a${group.name} ${groupType.koreanName} 정보")
+        player.sendColorizedMessage("&a리더: &f${Bukkit.getOfflinePlayer(group.leader).name}")
+        player.sendColorizedMessage("&a레벨: &f${group.level}")
+        player.sendColorizedMessage("&a인원: &f${group.members.size}")
+    }
 }

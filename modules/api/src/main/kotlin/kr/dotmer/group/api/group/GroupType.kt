@@ -4,5 +4,5 @@ enum class GroupType(
     val koreanName: String,
 ) {
     GUILD("길드"),
-    TOWN("마을"),
+    TOWN("타운"),
 }
