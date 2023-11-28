@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kr.dotmer.group.api.group.BaseGroup
 import kr.dotmer.group.api.group.GroupType
 import kr.dotmer.group.api.service.GroupService
+import kr.dotmer.group.core.hook.EconomyService
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.bukkit.core.coroutine.extension.BukkitAsync
 import kr.hqservice.framework.bukkit.core.extension.sendColorizedMessage
@@ -16,12 +17,36 @@ import java.util.concurrent.ConcurrentHashMap
 abstract class BaseGroupCommand<T : BaseGroup>(
     private val groupService: GroupService<T>,
     private val groupType: GroupType,
+    private val economyService: EconomyService,
     private val plugin: HQBukkitPlugin,
 ) {
     private val invitationMap: ConcurrentHashMap<Player, Invitation<T>> = ConcurrentHashMap()
 
-    // TODO: 생성 비용 설정 필요
     open suspend fun createGroup(player: Player, name: String) {
+        if (groupService.findPlayerGroup(player.uniqueId) != null) {
+            player.sendColorizedMessage("&c이미 다른 곳에 속해있습니다.")
+            return
+        }
+
+        if (groupService.findByName(name) != null) {
+            player.sendColorizedMessage("&c이미 존재하는 이름입니다.")
+            return
+        }
+
+        if (!groupService.validateGroupName(name)) {
+            player.sendColorizedMessage("&c이름은 2~10자의 한글, 영문, 숫자만 가능합니다.")
+            return
+        }
+
+        val balance = economyService.getBalance(player, "센")
+
+        if (balance < 10_000_000L) {
+            player.sendColorizedMessage("&c센이 부족합니다.")
+            return
+        }
+
+        economyService.withdraw(player, 10_000_000L, "센")
+
         val group = groupService.create(name, player.uniqueId)
         groupService.addMember(group, player.uniqueId)
     }

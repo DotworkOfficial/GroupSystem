@@ -4,6 +4,7 @@ import kr.dotmer.group.api.group.GroupType
 import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.base.BaseGroupCommand
 import kr.dotmer.group.core.guild.domain.GuildImpl
+import kr.dotmer.group.core.hook.EconomyService
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.command.Command
 import kr.hqservice.framework.command.CommandExecutor
@@ -13,8 +14,9 @@ import org.bukkit.entity.Player
 @Command(label = "길드")
 class GuildCommand(
     @Qualifier("group.guild") groupService: GroupService<GuildImpl>,
-    plugin: HQBukkitPlugin
-) : BaseGroupCommand<GuildImpl>(groupService, GroupType.GUILD, plugin) {
+    plugin: HQBukkitPlugin,
+    economyService: EconomyService
+) : BaseGroupCommand<GuildImpl>(groupService, GroupType.GUILD, economyService, plugin) {
     @CommandExecutor("생성", description = "길드를 생성합니다.")
     override suspend fun createGroup(player: Player, name: String) {
         super.createGroup(player, name)

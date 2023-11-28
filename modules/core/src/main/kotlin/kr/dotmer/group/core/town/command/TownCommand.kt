@@ -3,6 +3,7 @@ package kr.dotmer.group.core.town.command
 import kr.dotmer.group.api.group.GroupType
 import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.base.BaseGroupCommand
+import kr.dotmer.group.core.hook.EconomyService
 import kr.dotmer.group.core.town.domain.TownImpl
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.command.Command
@@ -14,7 +15,8 @@ import org.bukkit.entity.Player
 class TownCommand(
     @Qualifier("group.town") groupService: GroupService<TownImpl>,
     plugin: HQBukkitPlugin,
-) : BaseGroupCommand<TownImpl>(groupService, GroupType.TOWN, plugin) {
+    economyService: EconomyService,
+) : BaseGroupCommand<TownImpl>(groupService, GroupType.TOWN, economyService, plugin) {
     @CommandExecutor("생성", description = "타운을 생성합니다.")
     override suspend fun createGroup(player: Player, name: String) {
         super.createGroup(player, name)
