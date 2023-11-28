@@ -1,9 +1,9 @@
 package kr.dotmer.group.api.event
 
 import kr.dotmer.group.api.group.BaseGroup
-import org.bukkit.OfflinePlayer
+import java.util.*
 
 abstract class GroupPlayerEvent<T : BaseGroup>(
     group: T,
-    val player: OfflinePlayer
+    val playerId: UUID
 ) : GroupEvent<T>(group)
