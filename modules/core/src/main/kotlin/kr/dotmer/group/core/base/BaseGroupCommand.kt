@@ -106,7 +106,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
             ?.sendColorizedMessage("&a${player.name}님이 초대를 거절하였습니다.")
     }
 
-    open suspend fun disbandGroup(player: Player) {
+    open suspend fun disbandGroup(player: Player, name: String) {
         val playerGroup = groupService.findPlayerGroup(player.uniqueId)
 
         if (playerGroup == null) {
@@ -116,6 +116,11 @@ abstract class BaseGroupCommand<T : BaseGroup>(
 
         if (!playerGroup.isLeader(player.uniqueId)) {
             player.sendColorizedMessage("&c리더만 해체할 수 있습니다.")
+            return
+        }
+
+        if (name != playerGroup.name) {
+            player.sendColorizedMessage("&c해체할 ${groupType.koreanName}의 이름이 일치하지 않습니다.")
             return
         }
 
