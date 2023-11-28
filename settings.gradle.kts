@@ -15,6 +15,10 @@ dependencyResolutionManagement {
             library("paper-api", "io.papermc.paper:paper-api:${getProperty("spigotVersion")}")
         }
 
+        create("api") {
+            library("hqeconomy", "kr.hqservice:hqeconomy:1.0.0")
+        }
+
         create("framework") {
             library("core", "kr.hqservice:hqframework-bukkit-core:${getProperty("hqFrameworkVersion")}")
             library("command", "kr.hqservice:hqframework-bukkit-command:${getProperty("hqFrameworkVersion")}")
