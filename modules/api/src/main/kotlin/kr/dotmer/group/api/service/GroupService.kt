@@ -17,4 +17,6 @@ interface GroupService<T : BaseGroup> {
     suspend fun addMember(group: T, memberUniqueId: UUID)
 
     suspend fun removeMember(group: T, memberUniqueId: UUID)
+
+    fun validateGroupName(name: String): Boolean
 }

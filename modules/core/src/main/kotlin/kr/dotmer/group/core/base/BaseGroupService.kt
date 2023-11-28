@@ -4,10 +4,15 @@ import kr.dotmer.group.api.group.BaseGroup
 import kr.dotmer.group.api.repository.GroupRepository
 import kr.dotmer.group.api.service.GroupService
 import java.util.*
+import java.util.regex.Pattern
 
 abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity>(
     private val groupRepository: GroupRepository<GroupEntity>
 ) : GroupService<Group> {
+    object Constants {
+        val GROUP_NAME_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]*$")
+    }
+
     override suspend fun findAll(): List<Group> {
         return groupRepository.findAll().map { it.toDomain() }
     }
@@ -47,6 +52,10 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
     override suspend fun removeMember(group: Group, memberUniqueId: UUID) {
         groupRepository.removeMember(group.id, memberUniqueId)
         onGroupMemberRemoved(group, memberUniqueId)
+    }
+
+    override fun validateGroupName(name: String): Boolean {
+        return (name.length in 2..10 && Constants.GROUP_NAME_PATTERN.matcher(name).matches())
     }
 
     abstract fun onGroupCreated(group: Group)
