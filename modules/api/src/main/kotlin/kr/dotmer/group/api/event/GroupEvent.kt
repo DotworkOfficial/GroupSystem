@@ -6,7 +6,7 @@ import org.bukkit.event.HandlerList
 
 abstract class GroupEvent<T : BaseGroup>(
     val group: T
-) : Event() {
+) : Event(true) {
     companion object {
         private val HANDLERS = HandlerList()
 
