@@ -11,6 +11,6 @@ class TownImpl(
     level: UInt,
 ) : Town(id, name, leader, members, level) {
     override fun isFull(): Boolean {
-        TODO("Not yet implemented")
+        return members.size.toUInt() >= level * 3u
     }
 }

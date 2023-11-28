@@ -11,6 +11,6 @@ class GuildImpl(
     level: UInt,
 ) : Guild(id, name, leader, members, level) {
     override fun isFull(): Boolean {
-        TODO()
+        return members.size.toUInt() >= level * 3u
     }
 }
