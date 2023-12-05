@@ -37,6 +37,11 @@ class GuildCommand(
         super.denyInvite(player)
     }
 
+    @CommandExecutor("탈퇴", description = "길드를 탈퇴합니다.")
+    override suspend fun leaveGroup(player: Player) {
+        super.leaveGroup(player)
+    }
+
     @CommandExecutor("해체", description = "길드를 해체합니다.")
     override suspend fun disbandGroup(player: Player, name: String) {
         super.disbandGroup(player, name)

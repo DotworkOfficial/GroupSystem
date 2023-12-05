@@ -11,7 +11,7 @@ import kr.hqservice.framework.command.CommandExecutor
 import kr.hqservice.framework.global.core.component.Qualifier
 import org.bukkit.entity.Player
 
-@Command(label = "마을")
+@Command(label = "타운")
 class TownCommand(
     @Qualifier("group.town") groupService: GroupService<TownImpl>,
     plugin: HQBukkitPlugin,
@@ -35,6 +35,11 @@ class TownCommand(
     @CommandExecutor("거절", description = "타운 초대를 거절합니다.")
     override fun denyInvite(player: Player) {
         super.denyInvite(player)
+    }
+
+    @CommandExecutor("탈퇴", description = "타운을 탈퇴합니다.")
+    override suspend fun leaveGroup(player: Player) {
+        super.leaveGroup(player)
     }
 
     @CommandExecutor("해체", description = "타운을 해체합니다.")

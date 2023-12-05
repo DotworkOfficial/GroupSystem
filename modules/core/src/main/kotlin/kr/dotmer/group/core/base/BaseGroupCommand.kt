@@ -49,6 +49,8 @@ abstract class BaseGroupCommand<T : BaseGroup>(
 
         val group = groupService.create(name, player.uniqueId)
         groupService.addMember(group, player.uniqueId)
+
+        player.sendColorizedMessage("&a성공적으로 생성하였습니다.")
     }
 
     open suspend fun inviteMember(player: Player, target: Player) {
@@ -92,6 +94,23 @@ abstract class BaseGroupCommand<T : BaseGroup>(
                 target.sendColorizedMessage("&c초대장이 만료되었습니다.")
             }
         }
+    }
+
+    open suspend fun leaveGroup(player: Player) {
+        val group = groupService.findPlayerGroup(player.uniqueId)
+
+        if (group == null) {
+            player.sendColorizedMessage("&c어떤 곳에도 속해있지 않습니다.")
+            return
+        }
+
+        if (group.isLeader(player.uniqueId)) {
+            player.sendColorizedMessage("&c리더는 탈퇴할 수 없습니다.")
+            return
+        }
+
+        groupService.removeMember(group, player.uniqueId)
+        player.sendColorizedMessage("&a성공적으로 탈퇴하였습니다.")
     }
 
     open suspend fun acceptInvite(player: Player) {
@@ -161,7 +180,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
             return
         }
 
-        player.sendColorizedMessage("&a${group.name} ${groupType.koreanName} 정보")
+        player.sendColorizedMessage("&e${group.name} ${groupType.koreanName} 정보")
         player.sendColorizedMessage("&a리더: &f${Bukkit.getOfflinePlayer(group.leader).name}")
         player.sendColorizedMessage("&a레벨: &f${group.level}")
         player.sendColorizedMessage("&a인원: &f${group.members.size}")
