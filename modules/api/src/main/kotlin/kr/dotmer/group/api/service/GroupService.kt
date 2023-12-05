@@ -6,6 +6,8 @@ import java.util.*
 interface GroupService<T : BaseGroup> {
     suspend fun findAll(): List<T>
 
+    suspend fun findByUniqueId(uniqueId: UUID): T?
+
     suspend fun findByName(name: String): T?
 
     suspend fun findPlayerGroup(memberUniqueId: UUID): T?

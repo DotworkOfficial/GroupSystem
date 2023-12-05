@@ -1,10 +1,10 @@
 package kr.dotmer.group.core.guild
 
+import kr.dotmer.group.api.event.guild.GuildCreateEvent
+import kr.dotmer.group.api.event.guild.GuildPlayerJoinEvent
+import kr.dotmer.group.api.event.guild.GuildPlayerLeaveEvent
 import kr.dotmer.group.core.base.BaseGroupService
 import kr.dotmer.group.core.guild.domain.GuildImpl
-import kr.dotmer.group.core.guild.event.GuildCreateEvent
-import kr.dotmer.group.core.guild.event.GuildPlayerJoinEvent
-import kr.dotmer.group.core.guild.event.GuildPlayerLeaveEvent
 import kr.dotmer.group.core.guild.persistence.GuildEntity
 import kr.dotmer.group.core.guild.persistence.GuildRepository
 import kr.hqservice.framework.global.core.component.Qualifier
@@ -20,6 +20,7 @@ class GuildService(
     override suspend fun GuildEntity.toDomain(): GuildImpl {
         return GuildImpl(
             id = this.id.value,
+            uniqueId = this.uniqueId,
             name = this.name,
             leader = this.leader,
             level = this.level,

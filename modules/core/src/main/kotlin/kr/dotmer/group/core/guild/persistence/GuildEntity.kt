@@ -11,6 +11,7 @@ class GuildEntity(
 ) : BaseGroupEntity(id) {
     companion object : LongEntityClass<GuildEntity>(GuildTable)
 
+    override var uniqueId by GuildTable.uniqueId
     override var name by GuildTable.name
     override var leader by GuildTable.leader
     override var level by GuildTable.level

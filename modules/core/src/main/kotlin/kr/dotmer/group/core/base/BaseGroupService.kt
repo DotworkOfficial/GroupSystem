@@ -17,6 +17,10 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
         return groupRepository.findAll().map { it.toDomain() }
     }
 
+    override suspend fun findByUniqueId(uniqueId: UUID): Group? {
+        return groupRepository.findByUniqueId(uniqueId)?.toDomain()
+    }
+
     override suspend fun findByName(name: String): Group? {
         return groupRepository.findByName(name)?.toDomain()
     }
@@ -30,6 +34,7 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
      */
     override suspend fun create(name: String, leader: UUID): Group {
         val group = groupRepository.new {
+            this.uniqueId = UUID.randomUUID()
             this.name = name
             this.leader = leader
             this.level = 1u

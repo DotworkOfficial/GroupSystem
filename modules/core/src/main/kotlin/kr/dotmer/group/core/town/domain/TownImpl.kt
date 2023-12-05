@@ -5,11 +5,12 @@ import java.util.*
 
 class TownImpl(
     id: Long,
+    uniqueId: UUID,
     name: String,
     leader: UUID,
     members: List<UUID>,
     level: UInt,
-) : Town(id, name, leader, members, level) {
+) : Town(id, uniqueId, name, leader, members, level) {
     override fun isFull(): Boolean {
         return members.size.toUInt() >= level * 3u
     }

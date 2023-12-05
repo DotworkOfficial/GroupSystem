@@ -1,10 +1,10 @@
 package kr.dotmer.group.core.town
 
+import kr.dotmer.group.api.event.town.TownCreateEvent
+import kr.dotmer.group.api.event.town.TownPlayerJoinEvent
+import kr.dotmer.group.api.event.town.TownPlayerLeaveEvent
 import kr.dotmer.group.core.base.BaseGroupService
 import kr.dotmer.group.core.town.domain.TownImpl
-import kr.dotmer.group.core.town.event.TownCreateEvent
-import kr.dotmer.group.core.town.event.TownPlayerJoinEvent
-import kr.dotmer.group.core.town.event.TownPlayerLeaveEvent
 import kr.dotmer.group.core.town.persistence.TownEntity
 import kr.dotmer.group.core.town.persistence.TownRepository
 import kr.hqservice.framework.global.core.component.Qualifier
@@ -20,6 +20,7 @@ class TownService(
     override suspend fun TownEntity.toDomain(): TownImpl {
         return TownImpl(
             id = this.id.value,
+            uniqueId = this.uniqueId,
             name = this.name,
             leader = this.leader,
             level = this.level,

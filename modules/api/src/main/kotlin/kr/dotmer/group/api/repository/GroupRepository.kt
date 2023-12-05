@@ -5,6 +5,8 @@ import java.util.*
 interface GroupRepository<T> {
     suspend fun findById(id: Long): T?
 
+    suspend fun findByUniqueId(uniqueId: UUID): T?
+
     suspend fun findByName(name: String): T?
 
     suspend fun findPlayerGroup(memberUniqueId: UUID): T?

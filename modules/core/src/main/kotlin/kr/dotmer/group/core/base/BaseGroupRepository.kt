@@ -12,6 +12,14 @@ abstract class BaseGroupRepository<GroupEntity : BaseGroupEntity, UserEntity : B
     private val groupTable: BaseGroupTable,
     private val userTable: BaseUserTable,
 ) : GroupRepository<GroupEntity> {
+    override suspend fun findByUniqueId(uniqueId: UUID): GroupEntity? {
+        return newSuspendedTransaction {
+            groupEntityClass
+                .find { groupTable.uniqueId eq uniqueId }
+                .firstOrNull()
+        }
+    }
+
     override suspend fun findById(id: Long): GroupEntity? {
         return newSuspendedTransaction { groupEntityClass.findById(id) }
     }

@@ -4,6 +4,7 @@ import java.util.*
 
 abstract class BaseGroup(
     val id: Long,
+    val uniqueId: UUID,
     val name: String,
     val leader: UUID,
     val members: List<UUID>,

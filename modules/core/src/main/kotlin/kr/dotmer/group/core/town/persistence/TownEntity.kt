@@ -11,6 +11,7 @@ class TownEntity(
 ) : BaseGroupEntity(id) {
     companion object : LongEntityClass<TownEntity>(TownTable)
 
+    override var uniqueId by TownTable.uniqueId
     override var name by TownTable.name
     override var leader by TownTable.leader
     override var level by TownTable.level
