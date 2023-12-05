@@ -1,5 +1,6 @@
 plugins {
     id("cccgh.shared")
+    id("elroy.publish")
 }
 
 dependencies {
