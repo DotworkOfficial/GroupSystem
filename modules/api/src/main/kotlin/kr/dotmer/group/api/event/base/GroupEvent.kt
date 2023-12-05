@@ -1,4 +1,4 @@
-package kr.dotmer.group.api.event
+package kr.dotmer.group.api.event.base
 
 import kr.dotmer.group.api.group.BaseGroup
 import org.bukkit.event.Event
