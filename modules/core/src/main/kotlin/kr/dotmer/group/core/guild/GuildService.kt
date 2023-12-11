@@ -1,6 +1,8 @@
 package kr.dotmer.group.core.guild
 
+import java.util.UUID
 import kr.dotmer.group.api.event.guild.GuildCreateEvent
+import kr.dotmer.group.api.event.guild.GuildDisbandEvent
 import kr.dotmer.group.api.event.guild.GuildPlayerJoinEvent
 import kr.dotmer.group.api.event.guild.GuildPlayerLeaveEvent
 import kr.dotmer.group.core.base.BaseGroupService
@@ -10,7 +12,6 @@ import kr.dotmer.group.core.guild.persistence.GuildRepository
 import kr.hqservice.framework.global.core.component.Qualifier
 import kr.hqservice.framework.global.core.component.Service
 import org.bukkit.Bukkit
-import java.util.*
 
 @Service
 @Qualifier("group.guild")
@@ -42,6 +43,12 @@ class GuildService(
 
     override fun onGroupMemberRemoved(group: GuildImpl, memberUniqueId: UUID) {
         GuildPlayerLeaveEvent(group, memberUniqueId).let {
+            Bukkit.getServer().pluginManager.callEvent(it)
+        }
+    }
+
+    override fun onGroupDisbanded(group: GuildImpl) {
+        GuildDisbandEvent(group).let {
             Bukkit.getServer().pluginManager.callEvent(it)
         }
     }

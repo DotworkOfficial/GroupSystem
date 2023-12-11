@@ -1,10 +1,10 @@
 package kr.dotmer.group.core.base
 
+import java.util.UUID
+import java.util.regex.Pattern
 import kr.dotmer.group.api.group.BaseGroup
 import kr.dotmer.group.api.repository.GroupRepository
 import kr.dotmer.group.api.service.GroupService
-import java.util.*
-import java.util.regex.Pattern
 
 abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity>(
     private val groupRepository: GroupRepository<GroupEntity>
@@ -47,6 +47,8 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
 
     override suspend fun disband(group: Group) {
         groupRepository.delete(group.id)
+        
+        onGroupDisbanded(group)
     }
 
     override suspend fun addMember(group: Group, memberUniqueId: UUID) {
@@ -70,6 +72,8 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
     abstract fun onGroupMemberAdded(group: Group, memberUniqueId: UUID)
 
     abstract fun onGroupMemberRemoved(group: Group, memberUniqueId: UUID)
+
+    abstract fun onGroupDisbanded(group: Group)
 
     abstract suspend fun GroupEntity.toDomain(): Group
 }
