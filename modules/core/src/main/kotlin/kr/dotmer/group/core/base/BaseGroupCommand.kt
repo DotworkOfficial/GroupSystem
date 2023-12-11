@@ -9,6 +9,7 @@ import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.hook.EconomyService
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.bukkit.core.coroutine.extension.BukkitAsync
+import kr.hqservice.framework.bukkit.core.extension.colorize
 import kr.hqservice.framework.bukkit.core.extension.sendColorizedMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
@@ -40,17 +41,42 @@ abstract class BaseGroupCommand<T : BaseGroup>(
 
         val balance = economyService.getBalance(player, "센")
 
-        if (balance < 10_000_000L) {
+        if (balance < 5_000_000L) {
             player.sendColorizedMessage("&c센이 부족합니다.")
             return
         }
 
-        economyService.withdraw(player, 10_000_000L, "센")
+        economyService.withdraw(player, 5_000_000L, "센")
 
         val group = groupService.create(name, player.uniqueId)
         groupService.addMember(group, player.uniqueId)
 
         player.sendColorizedMessage("&a성공적으로 생성하였습니다.")
+        Bukkit.broadcastMessage("&a${player.name}님이 ${group.name} ${groupType.koreanName}을(를) 생성하였습니다.".colorize())
+    }
+
+    open suspend fun kickMember(player: Player, target: Player) {
+        val group = groupService.findPlayerGroup(player.uniqueId)
+
+        if (group == null) {
+            player.sendColorizedMessage("&c어떤 곳에도 속해있지 않습니다.")
+            return
+        }
+
+        if (!group.isLeader(player.uniqueId)) {
+            player.sendColorizedMessage("&c리더만 추방할 수 있습니다.")
+            return
+        }
+
+        if (!group.isMember(target.uniqueId)) {
+            player.sendColorizedMessage("&c해당 유저는 ${group.name} ${groupType.koreanName}에 속해있지 않습니다.")
+            return
+        }
+
+        groupService.removeMember(group, target.uniqueId)
+        player.sendColorizedMessage("&a성공적으로 추방하였습니다.")
+        target.sendColorizedMessage("&c${player.name}님에 의해 추방되었습니다.")
+
     }
 
     open suspend fun inviteMember(player: Player, target: Player) {
