@@ -1,5 +1,7 @@
 package kr.dotmer.group.core.base
 
+import java.util.UUID
+import java.util.concurrent.ConcurrentHashMap
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -13,7 +15,6 @@ import kr.hqservice.framework.bukkit.core.extension.colorize
 import kr.hqservice.framework.bukkit.core.extension.sendColorizedMessage
 import org.bukkit.Bukkit
 import org.bukkit.entity.Player
-import java.util.concurrent.ConcurrentHashMap
 
 abstract class BaseGroupCommand<T : BaseGroup>(
     private val groupService: GroupService<T>,
@@ -22,6 +23,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
     private val plugin: HQBukkitPlugin,
 ) {
     private val invitationMap: ConcurrentHashMap<Player, Invitation<T>> = ConcurrentHashMap()
+    private val rejoinCooldownPlayers = mutableListOf<UUID>()
 
     open suspend fun createGroup(player: Player, name: String) {
         if (groupService.findPlayerGroup(player.uniqueId) != null) {
@@ -74,6 +76,8 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         }
 
         groupService.removeMember(group, target.uniqueId)
+        rejoinCooldownPlayers.add(target.uniqueId)
+
         player.sendColorizedMessage("&a성공적으로 추방하였습니다.")
         target.sendColorizedMessage("&c${player.name}님에 의해 추방되었습니다.")
 
@@ -94,6 +98,11 @@ abstract class BaseGroupCommand<T : BaseGroup>(
 
         if (group.isFull()) {
             player.sendColorizedMessage("&c인원이 가득 찼습니다.")
+            return
+        }
+
+        if (rejoinCooldownPlayers.contains(target.uniqueId)) {
+            player.sendColorizedMessage("&c해당 유저는 다음 리붓까지 가입할 수 없습니다.")
             return
         }
 
@@ -136,6 +145,8 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         }
 
         groupService.removeMember(group, player.uniqueId)
+        rejoinCooldownPlayers.add(player.uniqueId)
+
         player.sendColorizedMessage("&a성공적으로 탈퇴하였습니다.")
     }
 
