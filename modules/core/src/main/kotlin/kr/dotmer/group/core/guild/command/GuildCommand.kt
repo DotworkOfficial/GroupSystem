@@ -51,4 +51,9 @@ class GuildCommand(
     override suspend fun groupInfo(player: Player) {
         super.groupInfo(player)
     }
+
+    @CommandExecutor("추방", description = "멤버를 추방합니다.")
+    override suspend fun kickMember(player: Player, target: Player) {
+        super.kickMember(player, target)
+    }
 }
