@@ -6,6 +6,7 @@ import kr.dotmer.group.core.base.BaseGroupCommand
 import kr.dotmer.group.core.guild.domain.GuildImpl
 import kr.dotmer.group.core.hook.EconomyService
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
+import kr.hqservice.framework.command.ArgumentLabel
 import kr.hqservice.framework.command.Command
 import kr.hqservice.framework.command.CommandExecutor
 import kr.hqservice.framework.global.core.component.Qualifier
@@ -53,7 +54,7 @@ class GuildCommand(
     }
 
     @CommandExecutor("추방", description = "멤버를 추방합니다.")
-    override suspend fun kickMember(player: Player, target: Player) {
-        super.kickMember(player, target)
+    override suspend fun kickMember(player: Player, @ArgumentLabel("닉네임") targetName: String) {
+        super.kickMember(player, targetName)
     }
 }

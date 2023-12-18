@@ -57,7 +57,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         Bukkit.broadcastMessage("&a${player.name}님이 ${group.name} ${groupType.koreanName}을(를) 생성하였습니다.".colorize())
     }
 
-    open suspend fun kickMember(player: Player, target: Player) {
+    open suspend fun kickMember(player: Player, targetName: String) {
         val group = groupService.findPlayerGroup(player.uniqueId)
 
         if (group == null) {
@@ -70,6 +70,14 @@ abstract class BaseGroupCommand<T : BaseGroup>(
             return
         }
 
+        @Suppress("DEPRECATION")
+        val target = Bukkit.getOfflinePlayer(targetName)
+
+        if (!target.hasPlayedBefore()) {
+            player.sendColorizedMessage("&c존재하지 않는 유저입니다.")
+            return
+        }
+
         if (!group.isMember(target.uniqueId)) {
             player.sendColorizedMessage("&c해당 유저는 ${group.name} ${groupType.koreanName}에 속해있지 않습니다.")
             return
@@ -79,8 +87,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         rejoinCooldownPlayers.add(target.uniqueId)
 
         player.sendColorizedMessage("&a성공적으로 추방하였습니다.")
-        target.sendColorizedMessage("&c${player.name}님에 의해 추방되었습니다.")
-
+        target.player?.sendColorizedMessage("&c${player.name}님에 의해 추방되었습니다.")
     }
 
     open suspend fun inviteMember(player: Player, target: Player) {
@@ -217,9 +224,16 @@ abstract class BaseGroupCommand<T : BaseGroup>(
             return
         }
 
-        player.sendColorizedMessage("&e${group.name} ${groupType.koreanName} 정보")
-        player.sendColorizedMessage("&a리더: &f${Bukkit.getOfflinePlayer(group.leader).name}")
-        player.sendColorizedMessage("&a레벨: &f${group.level}")
-        player.sendColorizedMessage("&a인원: &f${group.members.size}")
+        player.sendColorizedMessage("<s:9c9c83>&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        player.sendColorizedMessage("&6리더: &f${Bukkit.getOfflinePlayer(group.leader).name}")
+        player.sendColorizedMessage("&6레벨: &f${group.level}")
+        player.sendColorizedMessage("&6멤버:")
+
+        for (member in group.members) {
+            val prefix = if (member == group.members.last()) " §7┗━§f" else " §7┣━§f"
+            player.sendColorizedMessage("$prefix ${Bukkit.getOfflinePlayer(member).name}")
+        }
+
+        player.sendColorizedMessage("<s:9c9c83>&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
     }
 }
