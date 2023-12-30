@@ -9,6 +9,9 @@ import kr.dotmer.group.api.group.BaseGroup
 import kr.dotmer.group.api.group.GroupType
 import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.hook.EconomyService
+import kr.dotmer.group.core.hook.ItemProvider
+import kr.dotmer.group.core.settings.GroupSettings
+import kr.dotmer.group.core.settings.Settings
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.bukkit.core.coroutine.extension.BukkitAsync
 import kr.hqservice.framework.bukkit.core.extension.colorize
@@ -20,6 +23,8 @@ abstract class BaseGroupCommand<T : BaseGroup>(
     private val groupService: GroupService<T>,
     private val groupType: GroupType,
     private val economyService: EconomyService,
+    private val itemProvider: ItemProvider,
+    private val groupSettings: GroupSettings,
     private val plugin: HQBukkitPlugin,
 ) {
     private val invitationMap: ConcurrentHashMap<Player, Invitation<T>> = ConcurrentHashMap()
@@ -155,6 +160,38 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         rejoinCooldownPlayers.add(player.uniqueId)
 
         player.sendColorizedMessage("&a성공적으로 탈퇴하였습니다.")
+    }
+
+    open suspend fun levelUpGroup(player: Player) {
+        val group = groupService.findPlayerGroup(player.uniqueId)
+
+        if (group == null) {
+            player.sendColorizedMessage("&c어떤 곳에도 속해있지 않습니다.")
+            return
+        }
+
+        if (!group.isLeader(player.uniqueId)) {
+            player.sendColorizedMessage("&c리더만 진급할 수 있습니다.")
+            return
+        }
+
+        if (group.level >= groupSettings.getMaxLevel().toUInt()) {
+            player.sendColorizedMessage("&c더 이상 진급할 수 없습니다.")
+            return
+        }
+
+        val category = Settings.LevelUpItem.CATEGORY
+        val name = Settings.LevelUpItem.NAME
+
+        if (!itemProvider.hasItem(player, category, name, 5 * group.level.toInt())) {
+            player.sendColorizedMessage("&c번영의서가 부족합니다. (필요한 개수: ${5 * group.level.toInt()})")
+            return
+        }
+
+        itemProvider.takeItem(player, category, name, 5 * group.level.toInt())
+        groupService.levelUp(group)
+
+        player.sendColorizedMessage("&a성공적으로 진급했습니다.")
     }
 
     open suspend fun acceptInvite(player: Player) {

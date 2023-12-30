@@ -5,6 +5,8 @@ import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.base.BaseGroupCommand
 import kr.dotmer.group.core.guild.domain.GuildImpl
 import kr.dotmer.group.core.hook.EconomyService
+import kr.dotmer.group.core.hook.ItemProvider
+import kr.dotmer.group.core.settings.Settings
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.command.ArgumentLabel
 import kr.hqservice.framework.command.Command
@@ -16,8 +18,16 @@ import org.bukkit.entity.Player
 class GuildCommand(
     @Qualifier("group.guild") groupService: GroupService<GuildImpl>,
     plugin: HQBukkitPlugin,
-    economyService: EconomyService
-) : BaseGroupCommand<GuildImpl>(groupService, GroupType.GUILD, economyService, plugin) {
+    economyService: EconomyService,
+    @Qualifier("group.provider.eim") itemProvider: ItemProvider,
+) : BaseGroupCommand<GuildImpl>(
+    groupService = groupService,
+    groupType = GroupType.GUILD,
+    economyService = economyService,
+    itemProvider = itemProvider,
+    groupSettings = Settings.Guild,
+    plugin = plugin,
+) {
     @CommandExecutor("생성", description = "길드를 생성합니다.")
     override suspend fun createGroup(player: Player, name: String) {
         super.createGroup(player, name)
@@ -56,5 +66,10 @@ class GuildCommand(
     @CommandExecutor("추방", description = "멤버를 추방합니다.")
     override suspend fun kickMember(player: Player, @ArgumentLabel("닉네임") targetName: String) {
         super.kickMember(player, targetName)
+    }
+
+    @CommandExecutor("진급", description = "길드를 진급시킵니다.")
+    override suspend fun levelUpGroup(player: Player) {
+        super.levelUpGroup(player)
     }
 }

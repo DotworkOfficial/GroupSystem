@@ -4,6 +4,8 @@ import kr.dotmer.group.api.group.GroupType
 import kr.dotmer.group.api.service.GroupService
 import kr.dotmer.group.core.base.BaseGroupCommand
 import kr.dotmer.group.core.hook.EconomyService
+import kr.dotmer.group.core.hook.ItemProvider
+import kr.dotmer.group.core.settings.Settings
 import kr.dotmer.group.core.town.domain.TownImpl
 import kr.hqservice.framework.bukkit.core.HQBukkitPlugin
 import kr.hqservice.framework.command.ArgumentLabel
@@ -17,7 +19,15 @@ class TownCommand(
     @Qualifier("group.town") groupService: GroupService<TownImpl>,
     plugin: HQBukkitPlugin,
     economyService: EconomyService,
-) : BaseGroupCommand<TownImpl>(groupService, GroupType.TOWN, economyService, plugin) {
+    @Qualifier("group.provider.eim") itemProvider: ItemProvider
+) : BaseGroupCommand<TownImpl>(
+    groupService = groupService,
+    groupType = GroupType.TOWN,
+    economyService = economyService,
+    itemProvider = itemProvider,
+    groupSettings = Settings.Town,
+    plugin = plugin,
+) {
     @CommandExecutor("생성", description = "타운을 생성합니다.")
     override suspend fun createGroup(player: Player, name: String) {
         super.createGroup(player, name)
@@ -56,5 +66,10 @@ class TownCommand(
     @CommandExecutor("추방", description = "멤버를 추방합니다.")
     override suspend fun kickMember(player: Player, @ArgumentLabel("닉네임") targetName: String) {
         super.kickMember(player, targetName)
+    }
+
+    @CommandExecutor("진급", description = "타운을 진급시킵니다.")
+    override suspend fun levelUpGroup(player: Player) {
+        super.levelUpGroup(player)
     }
 }
