@@ -10,7 +10,7 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
     private val groupRepository: GroupRepository<GroupEntity>
 ) : GroupService<Group> {
     object Constants {
-        val GROUP_NAME_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]*$")
+        val GROUP_NAME_PATTERN = Pattern.compile("^[가-힣a-zA-Z0-9]*$")!!
     }
 
     override suspend fun findAll(): List<Group> {
