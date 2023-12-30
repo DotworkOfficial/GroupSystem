@@ -47,7 +47,6 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
 
     override suspend fun disband(group: Group) {
         groupRepository.delete(group.id)
-        
         onGroupDisbanded(group)
     }
 
@@ -63,6 +62,12 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
 
     override fun validateGroupName(name: String): Boolean {
         return (name.length in 2..10 && Constants.GROUP_NAME_PATTERN.matcher(name).matches())
+    }
+
+    override suspend fun levelUp(group: Group) {
+        groupRepository.update(group.id) {
+            this.level++
+        }
     }
 
     abstract fun onGroupCreated(group: Group)

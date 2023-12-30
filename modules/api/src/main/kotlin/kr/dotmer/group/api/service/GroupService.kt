@@ -1,7 +1,7 @@
 package kr.dotmer.group.api.service
 
+import java.util.UUID
 import kr.dotmer.group.api.group.BaseGroup
-import java.util.*
 
 interface GroupService<T : BaseGroup> {
     suspend fun findAll(): List<T>
@@ -19,6 +19,8 @@ interface GroupService<T : BaseGroup> {
     suspend fun addMember(group: T, memberUniqueId: UUID)
 
     suspend fun removeMember(group: T, memberUniqueId: UUID)
+
+    suspend fun levelUp(group: T)
 
     fun validateGroupName(name: String): Boolean
 }
