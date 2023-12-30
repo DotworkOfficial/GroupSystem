@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     compileOnly(libs.spigot.api)
+    compileOnly(libs.eim)
 
     compileOnly(framework.core)
     compileOnly(framework.database)

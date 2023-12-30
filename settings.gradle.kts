@@ -13,6 +13,7 @@ dependencyResolutionManagement {
         create("libs") {
             library("spigot-api", "org.spigotmc:spigot-api:${getProperty("spigotVersion")}")
             library("paper-api", "io.papermc.paper:paper-api:${getProperty("spigotVersion")}")
+            library("eim", "kr.elroy.itemmanager:elroy-item-manager:${getProperty("eimVersion")}")
         }
 
         create("api") {

@@ -11,7 +11,7 @@ bukkitResourceGenerator {
     name = "GroupSystem"
     apiVersion = "1.19"
     libraries = excludedRuntimeDependencies()
-    depend = listOf("HQFramework", "HQEconomy")
+    depend = listOf("HQFramework", "HQEconomy", "ElroyItemManager")
     softDepend = listOf("DotworkLibrary")
 }
 
