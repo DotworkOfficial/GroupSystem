@@ -1,0 +1,9 @@
+LevelUpItem:
+  Category: 도구
+  Name: 번영의서
+
+Guild:
+  MaxLevel: 4
+
+Town:
+  MaxLevel: 4
