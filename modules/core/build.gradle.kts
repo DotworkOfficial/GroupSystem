@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.spigot.api)
     compileOnly(libs.eim)
+    compileOnly(libs.elroylib.yaml)
 
     compileOnly(framework.core)
     compileOnly(framework.database)

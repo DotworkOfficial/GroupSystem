@@ -7,6 +7,7 @@ dependencyResolutionManagement {
         maven("https://maven.hqservice.kr/repository/maven-private")
         maven("https://maven.hqservice.kr/repository/maven-public")
         maven("https://repo.papermc.io/repository/maven-public/")
+        mavenLocal()
     }
 
     versionCatalogs {
@@ -14,6 +15,7 @@ dependencyResolutionManagement {
             library("spigot-api", "org.spigotmc:spigot-api:${getProperty("spigotVersion")}")
             library("paper-api", "io.papermc.paper:paper-api:${getProperty("spigotVersion")}")
             library("eim", "kr.elroy.itemmanager:elroy-item-manager:${getProperty("eimVersion")}")
+            library("elroylib-yaml", "kr.elroy:elroylib-yaml:${getProperty("elroyLibVersion")}")
         }
 
         create("api") {
