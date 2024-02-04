@@ -52,12 +52,12 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
 
     override suspend fun addMember(group: Group, memberUniqueId: UUID) {
         groupRepository.addMember(group.id, memberUniqueId)
-        onGroupMemberAdded(group, memberUniqueId)
+        onGroupMemberAdded(findByUniqueId(group.uniqueId)!!, memberUniqueId)
     }
 
     override suspend fun removeMember(group: Group, memberUniqueId: UUID) {
         groupRepository.removeMember(group.id, memberUniqueId)
-        onGroupMemberRemoved(group, memberUniqueId)
+        onGroupMemberRemoved(findByUniqueId(group.uniqueId)!!, memberUniqueId)
     }
 
     override fun validateGroupName(name: String): Boolean {
