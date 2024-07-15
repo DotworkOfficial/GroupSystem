@@ -7,6 +7,8 @@ dependencies {
     compileOnly(libs.eim)
     compileOnly(libs.elroylib.yaml)
 
+    compileOnly(files("${rootProject.projectDir}/libs/ChatControl-Red-10.27.7.jar"))
+
     compileOnly(framework.core)
     compileOnly(framework.database)
     compileOnly(framework.command)

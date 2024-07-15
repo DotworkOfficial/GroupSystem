@@ -12,7 +12,7 @@ bukkitResourceGenerator {
     apiVersion = "1.19"
     libraries = excludedRuntimeDependencies()
     depend = listOf("HQFramework", "HQEconomy", "ElroyItemManager", "ElroyLib")
-    softDepend = listOf("DotworkLibrary")
+    softDepend = listOf("DotworkLibrary", "ChatControl")
 }
 
 dependencies {
