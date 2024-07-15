@@ -60,6 +60,18 @@ abstract class BaseGroupService<Group : BaseGroup, GroupEntity : BaseGroupEntity
         onGroupMemberRemoved(findByUniqueId(group.uniqueId)!!, memberUniqueId)
     }
 
+    override suspend fun delegateLeader(group: Group, newLeaderUniqueId: UUID) {
+        groupRepository.update(group.id) {
+            this.leader = newLeaderUniqueId
+        }
+    }
+
+    override suspend fun setGroupName(group: Group, name: String) {
+        groupRepository.update(group.id) {
+            this.name = name
+        }
+    }
+
     override fun validateGroupName(name: String): Boolean {
         return (name.length in 2..10 && Constants.GROUP_NAME_PATTERN.matcher(name).matches())
     }

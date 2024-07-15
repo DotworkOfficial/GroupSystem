@@ -16,9 +16,13 @@ interface GroupService<T : BaseGroup> {
 
     suspend fun disband(group: T)
 
+    suspend fun setGroupName(group: T, name: String)
+
     suspend fun addMember(group: T, memberUniqueId: UUID)
 
     suspend fun removeMember(group: T, memberUniqueId: UUID)
+
+    suspend fun delegateLeader(group: T, newLeaderUniqueId: UUID)
 
     suspend fun levelUp(group: T)
 
