@@ -95,6 +95,37 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         target.player?.sendColorizedMessage("&c${player.name}님에 의해 추방되었습니다.")
     }
 
+    open suspend fun delegateLeader(player: Player, targetName: String) {
+        val group = groupService.findPlayerGroup(player.uniqueId)
+
+        if (group == null) {
+            player.sendColorizedMessage("&c어떤 곳에도 속해있지 않습니다.")
+            return
+        }
+
+        if (!group.isLeader(player.uniqueId)) {
+            player.sendColorizedMessage("&c리더만 위임할 수 있습니다.")
+            return
+        }
+
+        @Suppress("DEPRECATION")
+        val target = Bukkit.getOfflinePlayer(targetName)
+
+        if (!target.hasPlayedBefore()) {
+            player.sendColorizedMessage("&c존재하지 않는 유저입니다.")
+            return
+        }
+
+        if (!group.isMember(target.uniqueId)) {
+            player.sendColorizedMessage("&c해당 유저는 ${group.name} ${groupType.koreanName}에 속해있지 않습니다.")
+            return
+        }
+
+        groupService.delegateLeader(group, target.uniqueId)
+        player.sendColorizedMessage("&a성공적으로 위임하였습니다.")
+        target.player?.sendColorizedMessage("&a${player.name}님으로부터 리더를 위임받았습니다.")
+    }
+
     open suspend fun inviteMember(player: Player, target: Player) {
         val group = groupService.findPlayerGroup(player.uniqueId)
 
@@ -113,7 +144,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
             return
         }
 
-        if (rejoinCooldownPlayers.contains(target.uniqueId)) {
+        if (rejoinCooldownPlayers.contains(target.uniqueId) && Settings.rejoinCooldown) {
             player.sendColorizedMessage("&c해당 유저는 다음 리붓까지 가입할 수 없습니다.")
             return
         }
@@ -262,6 +293,7 @@ abstract class BaseGroupCommand<T : BaseGroup>(
         }
 
         player.sendColorizedMessage("<s:9c9c83>&m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━")
+        player.sendColorizedMessage("&6그룹명: ${group.name}")
         player.sendColorizedMessage("&6리더: &f${Bukkit.getOfflinePlayer(group.leader).name}")
         player.sendColorizedMessage("&6레벨: &f${group.level}")
         player.sendColorizedMessage("&6멤버:")
