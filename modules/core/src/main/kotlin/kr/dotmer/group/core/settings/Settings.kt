@@ -6,12 +6,16 @@ import org.bukkit.Bukkit
 object Settings {
     private val config by lazy {
         val plugin = Bukkit.getPluginManager().getPlugin("GroupSystem")!!
-        YamlConfig.createWithDefault(plugin, "settings.yml")
+        YamlConfig.createWithDefault(plugin, "settings.yml").apply {
+            load()
+        }
     }
 
     fun reload() {
         config.load()
     }
+
+    val rejoinCooldown get() = config.findBoolean("RejoinCooldown") ?: true
 
     object LevelUpItem {
         val CATEGORY
