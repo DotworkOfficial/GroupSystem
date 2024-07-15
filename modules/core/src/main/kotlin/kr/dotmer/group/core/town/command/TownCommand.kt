@@ -38,6 +38,11 @@ class TownCommand(
         super.inviteMember(player, target)
     }
 
+    @CommandExecutor("위임", description = "타운 리더를 위임합니다.")
+    override suspend fun delegateLeader(player: Player, targetName: String) {
+        super.delegateLeader(player, targetName)
+    }
+
     @CommandExecutor("수락", description = "타운 초대를 수락합니다.")
     override suspend fun acceptInvite(player: Player) {
         super.acceptInvite(player)

@@ -53,6 +53,11 @@ class GuildCommand(
         super.leaveGroup(player)
     }
 
+    @CommandExecutor("위임", description = "길드 리더를 위임합니다.")
+    override suspend fun delegateLeader(player: Player, targetName: String) {
+        super.delegateLeader(player, targetName)
+    }
+
     @CommandExecutor("해체", description = "길드를 해체합니다.")
     override suspend fun disbandGroup(player: Player, name: String) {
         super.disbandGroup(player, name)
